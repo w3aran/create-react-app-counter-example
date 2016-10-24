@@ -8,7 +8,6 @@ const decrementCounter = () => ({
   type: Counter.DECREMENT
 });
 
-
 export {
   incrementCounter,
   decrementCounter
