@@ -1,5 +1,4 @@
 export {
-  connectCounterStore,
   CounterContainer as Counter
 } from "./container";
 

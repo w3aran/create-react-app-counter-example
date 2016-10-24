@@ -1,5 +1,3 @@
-import React, { Component } from "react";
-
 import { CounterView } from "./view";
 import {
   incrementCounter,
@@ -7,42 +5,23 @@ import {
   counterReducer
 } from "../store";
 
-function connectCounterStore(CounterView) {
-  class CounterProvider extends Component {
-    constructor(props) {
-      super(props);
-      this.state = counterReducer();
-      this.dispatch = this.dispatch.bind(this);
-    }
-  
-    dispatch(action, cb = () => {}) {
-      this.setState((prevState, props) => counterReducer(prevState, action), cb);
-    }
-  
-    mapDispatchToProps(dispatch) {
-      return {
-        onIncrement: () => dispatch(incrementCounter()),
-        onDecrement: () => dispatch(decrementCounter())
-      };
-    }
-  
-    render() {
-      return (
-        <CounterView
-          {...this.state}
-          {...this.props}
-          {...this.mapDispatchToProps(this.dispatch)}
-        />
-      );
-    }
-  }
-  CounterProvider.displayName = `connectCounterStore(${(CounterView.displayName || CounterView.name || "CounterProvider")})`;
-  return CounterProvider;
-}
+import { connectLocalStore } from "../../connect-local-store";
 
-const CounterContainer = connectCounterStore(CounterView);
+const mapStateToProps = (state, props) => ({
+  value: state.value
+});
+
+const mapDispatchToProps = (dispatch, props) => ({
+  onIncrement: () => dispatch(incrementCounter()),
+  onDecrement: () => dispatch(decrementCounter())
+});
+
+const CounterContainer = connectLocalStore(CounterView, {
+  reducer: counterReducer,
+  mapStateToProps,
+  mapDispatchToProps
+});
 
 export {
-  connectCounterStore,
   CounterContainer
 };
